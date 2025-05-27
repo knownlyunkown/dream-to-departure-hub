@@ -1,334 +1,309 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowRight, ArrowLeft, MapPin, BookOpen, DollarSign, TrendingUp } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { MapPin, DollarSign, GraduationCap, TrendingUp } from 'lucide-react';
+
+interface QuizQuestion {
+  id: string;
+  question: string;
+  type: 'single' | 'multiple' | 'range';
+  options?: string[];
+  min?: number;
+  max?: number;
+}
+
+interface QuizResult {
+  country: string;
+  flag: string;
+  matchPercentage: number;
+  tuitionRange: string;
+  livingCost: string;
+  topCourses: string[];
+  prOptions: string;
+  highlights: string[];
+}
 
 const Quiz = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
-    educationLevel: '',
-    fieldOfStudy: '',
-    preferredCountries: [],
-    budget: '',
-    careerGoals: '',
-    englishProficiency: '',
-    workExperience: ''
-  });
-  
+  const [currentStep, setCurrentStep] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, any>>({});
   const [showResults, setShowResults] = useState(false);
 
-  const totalSteps = 6;
-
-  const countries = [
-    'United States', 'Canada', 'United Kingdom', 'Australia', 
-    'Germany', 'Netherlands', 'France', 'Ireland', 'New Zealand', 'Singapore'
+  const questions: QuizQuestion[] = [
+    {
+      id: 'education_level',
+      question: "What's your current education level?",
+      type: 'single',
+      options: ['High School', 'Bachelor\'s Degree', 'Master\'s Degree', 'PhD']
+    },
+    {
+      id: 'study_field',
+      question: "Which field interests you most?",
+      type: 'single',
+      options: ['Engineering & Technology', 'Business & Management', 'Medicine & Health Sciences', 'Arts & Humanities', 'Sciences', 'Computer Science']
+    },
+    {
+      id: 'budget',
+      question: "What's your annual budget (USD)?",
+      type: 'single',
+      options: ['Under $20,000', '$20,000 - $40,000', '$40,000 - $60,000', '$60,000+']
+    },
+    {
+      id: 'work_preference',
+      question: "Do you want to work while studying?",
+      type: 'single',
+      options: ['Yes, part-time', 'Yes, full-time during breaks', 'No, focus on studies']
+    },
+    {
+      id: 'post_study_goals',
+      question: "What are your post-study goals?",
+      type: 'multiple',
+      options: ['Work in the country', 'Return home', 'Start my own business', 'Further studies']
+    }
   ];
 
-  const handleCountryChange = (country: string, checked: boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      preferredCountries: checked 
-        ? [...prev.preferredCountries, country]
-        : prev.preferredCountries.filter(c => c !== country)
-    }));
+  const mockResults: QuizResult[] = [
+    {
+      country: 'Canada',
+      flag: '🇨🇦',
+      matchPercentage: 95,
+      tuitionRange: '$15,000 - $35,000',
+      livingCost: '$12,000 - $18,000',
+      topCourses: ['Computer Science', 'Business Administration', 'Engineering'],
+      prOptions: 'Excellent - Express Entry System',
+      highlights: ['High-quality education', 'Multicultural environment', 'Post-graduation work permits']
+    },
+    {
+      country: 'Germany',
+      flag: '🇩🇪',
+      matchPercentage: 88,
+      tuitionRange: '$0 - $3,000',
+      livingCost: '$10,000 - $15,000',
+      topCourses: ['Engineering', 'Computer Science', 'Business'],
+      prOptions: 'Good - EU Blue Card',
+      highlights: ['Low tuition fees', 'Strong economy', 'Research opportunities']
+    },
+    {
+      country: 'Australia',
+      flag: '🇦🇺',
+      matchPercentage: 82,
+      tuitionRange: '$20,000 - $45,000',
+      livingCost: '$18,000 - $25,000',
+      topCourses: ['Medicine', 'Engineering', 'Business'],
+      prOptions: 'Very Good - Points System',
+      highlights: ['World-class universities', 'Beautiful lifestyle', 'Strong job market']
+    }
+  ];
+
+  const handleAnswer = (questionId: string, answer: any) => {
+    setAnswers(prev => ({ ...prev, [questionId]: answer }));
   };
 
-  const nextStep = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
+  const handleNext = () => {
+    if (currentStep < questions.length - 1) {
+      setCurrentStep(prev => prev + 1);
     } else {
       setShowResults(true);
     }
   };
 
-  const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
+  const handlePrevious = () => {
+    setCurrentStep(prev => prev - 1);
   };
 
-  const getRecommendations = () => {
-    // Mock recommendations based on form data
-    return {
-      topCountries: ['Canada', 'Germany', 'Australia'],
-      recommendedFields: ['Computer Science', 'Data Science', 'Engineering'],
-      estimatedCost: '$25,000 - $40,000/year',
-      careerProspects: 'Excellent job market with 85% employment rate',
-      nextSteps: [
-        'Prepare for IELTS/TOEFL',
-        'Research specific universities',
-        'Start working on your SOP',
-        'Gather financial documents'
-      ]
-    };
+  const restartQuiz = () => {
+    setCurrentStep(0);
+    setAnswers({});
+    setShowResults(false);
   };
+
+  const progress = ((currentStep + 1) / questions.length) * 100;
 
   if (showResults) {
-    const recommendations = getRecommendations();
-    
     return (
-      <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Personalized Recommendations</h1>
-            <p className="text-lg text-gray-600">Based on your preferences, here's what we recommend</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              Your Perfect Study Abroad Matches! 🎉
+            </h1>
+            <p className="text-lg text-gray-600">
+              Based on your preferences, here are the best countries for your study abroad journey
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <Card className="rounded-2xl border-0 shadow-soft">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-primary-600" />
-                  Top Countries for You
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {recommendations.topCountries.map((country, index) => (
-                    <div key={country} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                      <span className="font-medium">{country}</span>
-                      <span className="text-sm text-gray-500">#{index + 1} Match</span>
+          <div className="space-y-6">
+            {mockResults.map((result, index) => (
+              <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
+                <CardHeader className="bg-gradient-to-r from-primary-500 to-secondary-500 text-white">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-3xl">{result.flag}</span>
+                      <div>
+                        <CardTitle className="text-xl">{result.country}</CardTitle>
+                        <Badge variant="secondary" className="bg-white/20 text-white">
+                          {result.matchPercentage}% Match
+                        </Badge>
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-2xl border-0 shadow-soft">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-secondary-600" />
-                  Recommended Fields
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {recommendations.recommendedFields.map((field) => (
-                    <div key={field} className="p-3 bg-secondary-50 rounded-xl">
-                      <span className="font-medium text-secondary-700">{field}</span>
+                    <div className="text-right">
+                      <div className="text-sm opacity-90">Match Score</div>
+                      <div className="text-2xl font-bold">{result.matchPercentage}%</div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-2xl border-0 shadow-soft">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <DollarSign className="w-5 h-5 text-green-600" />
-                  Estimated Costs
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold text-green-600 mb-2">{recommendations.estimatedCost}</p>
-                <p className="text-gray-600">Including tuition and living expenses</p>
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-2xl border-0 shadow-soft">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-blue-600" />
-                  Career Prospects
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700">{recommendations.careerProspects}</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card className="rounded-2xl border-0 shadow-soft mb-8">
-            <CardHeader>
-              <CardTitle>Your Next Steps</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {recommendations.nextSteps.map((step, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-semibold text-sm">
-                      {index + 1}
-                    </div>
-                    <span>{step}</span>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="flex items-start space-x-3">
+                        <DollarSign className="w-5 h-5 text-primary-600 mt-1" />
+                        <div>
+                          <div className="font-semibold">Annual Tuition</div>
+                          <div className="text-gray-600">{result.tuitionRange}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <MapPin className="w-5 h-5 text-primary-600 mt-1" />
+                        <div>
+                          <div className="font-semibold">Living Cost</div>
+                          <div className="text-gray-600">{result.livingCost}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <TrendingUp className="w-5 h-5 text-primary-600 mt-1" />
+                        <div>
+                          <div className="font-semibold">PR Opportunities</div>
+                          <div className="text-gray-600">{result.prOptions}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="font-semibold mb-2">Top Courses</div>
+                        <div className="flex flex-wrap gap-2">
+                          {result.topCourses.map((course, i) => (
+                            <Badge key={i} variant="outline">{course}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-semibold mb-2">Why {result.country}?</div>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {result.highlights.map((highlight, i) => (
+                            <li key={i}>• {highlight}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-6 pt-6 border-t flex space-x-3">
+                    <Button className="flex-1">
+                      Explore Universities in {result.country}
+                    </Button>
+                    <Button variant="outline">Save to Dashboard</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
-          <div className="text-center space-y-4">
-            <Button size="lg" className="rounded-2xl" asChild>
-              <Link to="/dashboard">
-                Save to My Dashboard
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Link>
+          <div className="text-center mt-8">
+            <Button onClick={restartQuiz} variant="outline" size="lg">
+              Take Quiz Again
             </Button>
-            <div className="flex justify-center gap-4">
-              <Button variant="outline" onClick={() => setShowResults(false)}>
-                Retake Quiz
-              </Button>
-              <Button variant="outline" asChild>
-                <Link to="/explore">Explore Countries</Link>
-              </Button>
-            </div>
           </div>
         </div>
       </div>
     );
   }
 
+  const currentQuestion = questions[currentStep];
+  const currentAnswer = answers[currentQuestion.id];
+
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-gray-600">Step {currentStep} of {totalSteps}</span>
-            <span className="text-sm text-gray-600">{Math.round((currentStep / totalSteps) * 100)}% Complete</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-gradient-to-r from-primary-500 to-secondary-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-            ></div>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 py-12">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            Find Your Perfect Study Destination
+          </h1>
+          <p className="text-lg text-gray-600">
+            Answer a few questions to get personalized country and course recommendations
+          </p>
         </div>
 
-        <Card className="rounded-2xl border-0 shadow-soft">
+        <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-2xl text-center">Find Your Perfect Study Abroad Match</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">Question {currentStep + 1} of {questions.length}</CardTitle>
+              <span className="text-sm text-gray-500">{Math.round(progress)}% Complete</span>
+            </div>
+            <Progress value={progress} className="w-full" />
           </CardHeader>
-          <CardContent className="space-y-6">
-            {currentStep === 1 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">What's your current education level?</h3>
-                <Select value={formData.educationLevel} onValueChange={(value) => setFormData(prev => ({...prev, educationLevel: value}))}>
-                  <SelectTrigger className="rounded-xl">
-                    <SelectValue placeholder="Select your education level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="high-school">High School Graduate</SelectItem>
-                    <SelectItem value="bachelors">Bachelor's Degree</SelectItem>
-                    <SelectItem value="masters">Master's Degree</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl">{currentQuestion.question}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {currentQuestion.type === 'single' && currentQuestion.options && (
+              <div className="space-y-3">
+                {currentQuestion.options.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswer(currentQuestion.id, option)}
+                    className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
+                      currentAnswer === option
+                        ? 'border-primary-500 bg-primary-50'
+                        : 'border-gray-200 hover:border-primary-200'
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ))}
               </div>
             )}
 
-            {currentStep === 2 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Which countries interest you most?</h3>
-                <p className="text-gray-600">Select all that apply</p>
-                <div className="grid grid-cols-2 gap-3">
-                  {countries.map((country) => (
-                    <label key={country} className="flex items-center space-x-3 p-3 border rounded-xl hover:bg-gray-50 cursor-pointer">
-                      <Checkbox 
-                        checked={formData.preferredCountries.includes(country)}
-                        onCheckedChange={(checked) => handleCountryChange(country, checked)}
-                      />
-                      <span>{country}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {currentStep === 3 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">What field would you like to study?</h3>
-                <Select value={formData.fieldOfStudy} onValueChange={(value) => setFormData(prev => ({...prev, fieldOfStudy: value}))}>
-                  <SelectTrigger className="rounded-xl">
-                    <SelectValue placeholder="Select your field of interest" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="computer-science">Computer Science</SelectItem>
-                    <SelectItem value="engineering">Engineering</SelectItem>
-                    <SelectItem value="business">Business & Management</SelectItem>
-                    <SelectItem value="medicine">Medicine & Healthcare</SelectItem>
-                    <SelectItem value="arts">Arts & Design</SelectItem>
-                    <SelectItem value="social-sciences">Social Sciences</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-
-            {currentStep === 4 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">What's your budget for studying abroad?</h3>
-                <Select value={formData.budget} onValueChange={(value) => setFormData(prev => ({...prev, budget: value}))}>
-                  <SelectTrigger className="rounded-xl">
-                    <SelectValue placeholder="Select your budget range" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="under-20k">Under $20,000/year</SelectItem>
-                    <SelectItem value="20k-40k">$20,000 - $40,000/year</SelectItem>
-                    <SelectItem value="40k-60k">$40,000 - $60,000/year</SelectItem>
-                    <SelectItem value="over-60k">Over $60,000/year</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-
-            {currentStep === 5 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">What are your career goals?</h3>
-                <Select value={formData.careerGoals} onValueChange={(value) => setFormData(prev => ({...prev, careerGoals: value}))}>
-                  <SelectTrigger className="rounded-xl">
-                    <SelectValue placeholder="Select your primary goal" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="work-abroad">Work abroad after graduation</SelectItem>
-                    <SelectItem value="return-home">Return to home country</SelectItem>
-                    <SelectItem value="start-business">Start my own business</SelectItem>
-                    <SelectItem value="academia">Pursue academia/research</SelectItem>
-                    <SelectItem value="undecided">Still deciding</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-
-            {currentStep === 6 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">How would you rate your English proficiency?</h3>
-                <Select value={formData.englishProficiency} onValueChange={(value) => setFormData(prev => ({...prev, englishProficiency: value}))}>
-                  <SelectTrigger className="rounded-xl">
-                    <SelectValue placeholder="Select your English level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="native">Native/Fluent</SelectItem>
-                    <SelectItem value="advanced">Advanced</SelectItem>
-                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                    <SelectItem value="beginner">Beginner</SelectItem>
-                  </SelectContent>
-                </Select>
+            {currentQuestion.type === 'multiple' && currentQuestion.options && (
+              <div className="space-y-3">
+                {currentQuestion.options.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      const currentAnswers = currentAnswer || [];
+                      const newAnswers = currentAnswers.includes(option)
+                        ? currentAnswers.filter((a: string) => a !== option)
+                        : [...currentAnswers, option];
+                      handleAnswer(currentQuestion.id, newAnswers);
+                    }}
+                    className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
+                      currentAnswer && currentAnswer.includes(option)
+                        ? 'border-primary-500 bg-primary-50'
+                        : 'border-gray-200 hover:border-primary-200'
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ))}
               </div>
             )}
 
             <div className="flex justify-between pt-6">
-              <Button 
-                variant="outline" 
-                onClick={prevStep}
-                disabled={currentStep === 1}
-                className="rounded-xl"
+              <Button
+                variant="outline"
+                onClick={handlePrevious}
+                disabled={currentStep === 0}
               >
-                <ArrowLeft className="mr-2 w-4 h-4" />
                 Previous
               </Button>
-              
-              <Button 
-                onClick={nextStep}
-                className="rounded-xl"
+              <Button
+                onClick={handleNext}
+                disabled={!currentAnswer || (Array.isArray(currentAnswer) && currentAnswer.length === 0)}
               >
-                {currentStep === totalSteps ? 'Get My Recommendations' : 'Next'}
-                <ArrowRight className="ml-2 w-4 h-4" />
+                {currentStep === questions.length - 1 ? 'Get Results' : 'Next'}
               </Button>
             </div>
           </CardContent>
