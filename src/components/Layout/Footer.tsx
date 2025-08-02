@@ -44,7 +44,7 @@ const Footer = () => {
 
         <div className="mt-8 pt-8 border-t border-gray-200">
           <p className="text-center text-sm text-gray-500">
-            © 2024 Altvis. All rights reserved. Made with ❤️ for students worldwide.
+            © 2025 Altvis. All rights reserved. Made with ❤️ for students worldwide.
           </p>
         </div>
       </div>

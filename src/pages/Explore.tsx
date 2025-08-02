@@ -24,8 +24,20 @@ const Explore = () => {
       topUniversities: ['University of Toronto', 'UBC', 'McGill University'],
       prOptions: 'Excellent',
       popularFields: ['Computer Science', 'Engineering', 'Business'],
-      image: 'https://images.unsplash.com/photo-1503614472-8c93d56cd72b?w=400&h=250&fit=crop',
+      image: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=250&fit=crop',
       highlights: ['Work while studying', 'Post-graduation work permit', 'Pathway to PR']
+    },
+    {
+      id: 'usa',
+      name: 'United States',
+      region: 'North America',
+      tuitionRange: '$20,000 - $60,000',
+      livingCost: '$15,000 - $25,000',
+      topUniversities: ['MIT', 'Stanford', 'Harvard University'],
+      prOptions: 'Limited',
+      popularFields: ['Computer Science', 'Business', 'Engineering'],
+      image: 'https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=400&h=250&fit=crop',
+      highlights: ['Top universities', 'Research opportunities', 'Tech industry hub']
     },
     {
       id: 'germany',
@@ -48,7 +60,7 @@ const Explore = () => {
       topUniversities: ['University of Melbourne', 'ANU', 'University of Sydney'],
       prOptions: 'Excellent',
       popularFields: ['Medicine', 'Engineering', 'IT'],
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=250&fit=crop',
+      image: 'https://images.unsplash.com/photo-1482938289607-d4a9ddbe4151?w=400&h=250&fit=crop',
       highlights: ['High quality of life', 'Work rights', 'Research opportunities']
     },
     {
@@ -60,7 +72,7 @@ const Explore = () => {
       topUniversities: ['Oxford', 'Cambridge', 'Imperial College'],
       prOptions: 'Limited',
       popularFields: ['Business', 'Engineering', 'Arts'],
-      image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&h=250&fit=crop',
+      image: 'https://images.unsplash.com/photo-1527576539890-dfa815648363?w=400&h=250&fit=crop',
       highlights: ['World-class education', 'Historic universities', 'Graduate visa available']
     },
     {
@@ -86,6 +98,30 @@ const Explore = () => {
       popularFields: ['Business', 'Engineering', 'Computer Science'],
       image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=400&h=250&fit=crop',
       highlights: ['Gateway to Asia', 'Top universities', 'Multicultural environment']
+    },
+    {
+      id: 'france',
+      name: 'France',
+      region: 'Europe',
+      tuitionRange: '€3,000 - €15,000',
+      livingCost: '€9,000 - €14,000',
+      topUniversities: ['Sorbonne', 'École Polytechnique', 'Sciences Po'],
+      prOptions: 'Good',
+      popularFields: ['Arts', 'Business', 'Engineering'],
+      image: 'https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=400&h=250&fit=crop',
+      highlights: ['Rich culture', 'EU opportunities', 'Renowned cuisine & arts']
+    },
+    {
+      id: 'japan',
+      name: 'Japan',
+      region: 'Asia',
+      tuitionRange: '¥500,000 - ¥1,800,000',
+      livingCost: '¥800,000 - ¥1,200,000',
+      topUniversities: ['University of Tokyo', 'Kyoto University', 'Osaka University'],
+      prOptions: 'Limited',
+      popularFields: ['Technology', 'Engineering', 'Robotics'],
+      image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=250&fit=crop',
+      highlights: ['Innovation hub', 'Unique culture', 'Technology advancement']
     }
   ];
 

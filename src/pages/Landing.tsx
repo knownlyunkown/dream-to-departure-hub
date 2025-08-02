@@ -134,8 +134,8 @@ const Landing = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="p-8 rounded-2xl border-0 shadow-soft text-center">
               <CardContent className="p-0">
-                <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <span className="text-2xl font-bold text-primary-600">1</span>
+                <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <span className="text-2xl font-bold text-white">1</span>
                 </div>
                 <h3 className="text-xl font-semibold mb-4">Discover</h3>
                 <p className="text-gray-600">Take our smart quiz to find countries, universities, and courses that match your goals, budget, and preferences.</p>
@@ -144,8 +144,8 @@ const Landing = () => {
 
             <Card className="p-8 rounded-2xl border-0 shadow-soft text-center">
               <CardContent className="p-0">
-                <div className="w-16 h-16 bg-secondary-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <span className="text-2xl font-bold text-secondary-600">2</span>
+                <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <span className="text-2xl font-bold text-white">2</span>
                 </div>
                 <h3 className="text-xl font-semibold mb-4">Prepare</h3>
                 <p className="text-gray-600">Use our AI-powered tools to build SOPs, prepare for tests, plan finances, and track your application progress.</p>
@@ -181,9 +181,9 @@ const Landing = () => {
                 <CardContent className="p-0">
                   <div className="flex items-center mb-4">
                     <img 
-                      src={`https://images.unsplash.com/photo-${1494790108755 + index}-40e76d47acd4?w=60&h=60&fit=crop&crop=face`}
+                      src={`https://images.unsplash.com/photo-${index === 0 ? '1581091226825-a6a2a5aee158' : index === 1 ? '1519389950473-47ba0277781c' : '1581090464777-f3220bbe1b8b'}?w=60&h=60&fit=crop&crop=face`}
                       alt={testimonial.name}
-                      className="w-12 h-12 rounded-full mr-4"
+                      className="w-12 h-12 rounded-full mr-4 object-cover"
                     />
                     <div>
                       <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
@@ -203,16 +203,76 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Partners */}
+      {/* Featured Resources */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <h3 className="text-lg font-semibold text-gray-600 mb-8">Trusted by partners worldwide</h3>
-          <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-            {partners.map((partner, index) => (
-              <div key={index} className="text-gray-500 font-medium text-lg">
-                {partner}
-              </div>
-            ))}
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Featured Resources</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Everything you need to succeed in your study abroad journey
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="p-6 rounded-2xl border-0 shadow-soft hover:shadow-lg transition-shadow">
+              <CardContent className="p-0 text-center">
+                <div className="relative mb-4 h-32 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=200&fit=crop"
+                    alt="Test Prep"
+                    className="w-full h-full object-cover mix-blend-overlay opacity-80"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/50 to-secondary-500/50"></div>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Test Prep</h3>
+                <p className="text-sm text-gray-600">IELTS, GRE & TOEFL preparation</p>
+              </CardContent>
+            </Card>
+
+            <Card className="p-6 rounded-2xl border-0 shadow-soft hover:shadow-lg transition-shadow">
+              <CardContent className="p-0 text-center">
+                <div className="relative mb-4 h-32 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=200&fit=crop"
+                    alt="SOP & LOR Builder"
+                    className="w-full h-full object-cover mix-blend-overlay opacity-80"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/50 to-secondary-500/50"></div>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">SOP & LOR Builder</h3>
+                <p className="text-sm text-gray-600">AI-powered application essays</p>
+              </CardContent>
+            </Card>
+
+            <Card className="p-6 rounded-2xl border-0 shadow-soft hover:shadow-lg transition-shadow">
+              <CardContent className="p-0 text-center">
+                <div className="relative mb-4 h-32 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=200&fit=crop"
+                    alt="Visa Guide"
+                    className="w-full h-full object-cover mix-blend-overlay opacity-80"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/50 to-secondary-500/50"></div>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Visa Guide</h3>
+                <p className="text-sm text-gray-600">Step-by-step visa assistance</p>
+              </CardContent>
+            </Card>
+
+            <Card className="p-6 rounded-2xl border-0 shadow-soft hover:shadow-lg transition-shadow">
+              <CardContent className="p-0 text-center">
+                <div className="relative mb-4 h-32 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=400&h=200&fit=crop"
+                    alt="Loan & Scholarship"
+                    className="w-full h-full object-cover mix-blend-overlay opacity-80"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/50 to-secondary-500/50"></div>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Loan & Scholarship</h3>
+                <p className="text-sm text-gray-600">Funding opportunities finder</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
