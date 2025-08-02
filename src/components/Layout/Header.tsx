@@ -2,18 +2,16 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Plane } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   
   const navigation = [
-    { name: 'Explore Countries', href: '/explore' },
-    { name: 'Quiz', href: '/quiz' },
-    { name: 'Tools', href: '/tools' },
+    { name: 'Countries', href: '/explore' },
     { name: 'Resources', href: '/resources' },
-    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -25,9 +23,9 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-sm">SB</span>
+              <Plane className="w-4 h-4 text-white" />
             </div>
-            <span className="font-inter font-bold text-xl text-gray-900">StudyBridge</span>
+            <span className="font-inter font-bold text-xl text-gray-900">Altvis</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -53,7 +51,7 @@ const Header = () => {
               <Link to="/login">Sign In</Link>
             </Button>
             <Button size="sm" asChild>
-              <Link to="/dashboard">Get Started</Link>
+              <Link to="/dashboard">Dashboard</Link>
             </Button>
           </div>
 
@@ -89,7 +87,7 @@ const Header = () => {
                   <Link to="/login">Sign In</Link>
                 </Button>
                 <Button className="w-full" asChild>
-                  <Link to="/dashboard">Get Started</Link>
+                  <Link to="/dashboard">Dashboard</Link>
                 </Button>
               </div>
             </div>

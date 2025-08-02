@@ -12,7 +12,9 @@ import Explore from "./pages/Explore";
 import Dashboard from "./pages/Dashboard";
 import Tools from "./pages/Tools";
 import Resources from "./pages/Resources";
-import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Help from "./pages/Help";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,7 +35,9 @@ const App = () => (
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/tools" element={<Tools />} />
               <Route path="/resources" element={<Resources />} />
-              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/help" element={<Help />} />
+              <Route path="/privacy" element={<Privacy />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
